@@ -16,6 +16,24 @@ namespace CW2.DAL.Repositories
                                 FROM Staff
                                 WHERE StaffId = @StaffId";
 
+        private const string INSERT_SQL = @"
+                                INSERT INTO Staff (Name, Role, Contact)
+                                OUTPUT inserted.StaffId
+                                VALUES (@Name, @Role, @Contact)";
+
+        private const string UPDATE_SQL = @"
+                                UPDATE Staff
+                                SET 
+                                    Name  = @Name,
+                                    Role  = @Role,
+                                    Contact = @Contact
+                                WHERE StaffId = @StaffId";
+
+        private const string DELETE_SQL = @"
+                                DELETE FROM Staff 
+                                WHERE StaffId = @StaffId";
+
+
         private readonly string _connStr;
 
         public AdoNetStaffRepository(string connStr)
@@ -25,6 +43,18 @@ namespace CW2.DAL.Repositories
 
 
         public void Delete(Staff staff)
+        {
+            using var conn = new SqlConnection(_connStr);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = DELETE_SQL;
+            cmd.Parameters.AddWithValue("StaffId", staff.StaffId);
+
+            conn.Open();
+
+            cmd.ExecuteNonQuery();
+        }
+
+        public IList<Staff> Filter(string? name, string? role, string? contact, int page = 1, int pageSize = 3, string sortColumn = "StaffId", bool sortDesc = false)
         {
             throw new NotImplementedException();
         }
@@ -76,13 +106,35 @@ namespace CW2.DAL.Repositories
 
         public Staff Insert(Staff staff)
         {
-            throw new NotImplementedException();
+            using var conn = new SqlConnection(_connStr);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = INSERT_SQL;
+            cmd.Parameters.AddWithValue("Name", staff.Name);
+            cmd.Parameters.AddWithValue("Role", staff.Role);
+            cmd.Parameters.AddWithValue("Contact", staff.Contact ?? (object)DBNull.Value);
+
+            conn.Open();
+            int id = (int)cmd.ExecuteScalar();
+            staff.StaffId = id;
+
+            return staff;
         }
 
         public void Update(Staff staff)
         {
-            throw new NotImplementedException();
+            using var conn = new SqlConnection(_connStr);
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = UPDATE_SQL;
+            cmd.Parameters.AddWithValue("Name", staff.Name);
+            cmd.Parameters.AddWithValue("Role", staff.Role);
+            cmd.Parameters.AddWithValue("Contact", staff.Contact ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("StaffId", staff.StaffId);
+
+            conn.Open();
+
+            cmd.ExecuteNonQuery();
         }
+
 
         private Staff MapReader(DbDataReader rdr)
         {
