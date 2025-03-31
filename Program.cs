@@ -1,16 +1,20 @@
+using CW2.DAL.Entities;
+using CW2.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 /*using CW2.DAL.Ef;
 using CW2.DAL.Repositories;*/
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
 IConfiguration conf = builder.Configuration;
 
-string connStr = conf.GetConnectionString("DB");
+string connStr = conf.GetConnectionString("ArtRentLocalDB");
 connStr = connStr.Replace("|DbDir|", builder.Environment.ContentRootPath);
+
+builder.Services.AddSingleton<IStaffRepository>
+    (s => new AdoNetStaffRepository(connStr));
+
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -33,6 +37,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Staff}/{action=Index}/{id?}");
 
 app.Run();
