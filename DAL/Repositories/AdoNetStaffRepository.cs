@@ -1,5 +1,6 @@
 ﻿using CW2.DAL.Entities;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace CW2.DAL.Repositories
@@ -7,8 +8,13 @@ namespace CW2.DAL.Repositories
     public class AdoNetStaffRepository : IStaffRepository
     {
         private const string SELECT_ALL_SQL = @"
-                                select StaffId, Name, Role, Contact
-                                from Staff";
+                                SELECT StaffId, Name, Role, Contact
+                                FROM Staff";
+
+        private const string SELECT_BY_ID = @"
+                                SELECT StaffId, Name, Role, Contact
+                                FROM Staff
+                                WHERE StaffId = @StaffId";
 
         private readonly string _connStr;
 
@@ -36,13 +42,7 @@ namespace CW2.DAL.Repositories
 
             while (rdr.Read())
             {
-                var staff = new Staff()
-                {
-                    StaffId = rdr.GetInt32("StaffID"),
-                    Name = rdr.GetString("Name"),
-                    Role = rdr.GetString("Role"),
-                    Contact = rdr.GetString("Contact")
-                };
+                var staff = MapReader(rdr);
 
                 list.Add(staff);
             }
@@ -51,7 +51,27 @@ namespace CW2.DAL.Repositories
 
         public Staff GetById(int id)
         {
-            throw new NotImplementedException();
+            using var conn = new SqlConnection(_connStr);
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = SELECT_BY_ID;
+
+            var pStaffId = cmd.CreateParameter();
+            pStaffId.ParameterName = "StaffID";
+            pStaffId.Value = id;
+            pStaffId.DbType = DbType.Int32;
+            pStaffId.Direction = ParameterDirection.Input;
+            cmd.Parameters.Add(pStaffId);
+
+            conn.Open();
+
+            using var rdr = cmd.ExecuteReader();
+            Staff? staff = null;
+            if (rdr.Read())
+            {
+                staff = MapReader(rdr);
+            }
+            return staff;
+
         }
 
         public Staff Insert(Staff staff)
@@ -63,5 +83,17 @@ namespace CW2.DAL.Repositories
         {
             throw new NotImplementedException();
         }
+
+        private Staff MapReader(DbDataReader rdr)
+        {
+            return new Staff()
+            {
+                StaffId = rdr.GetInt32("StaffID"),
+                Name = rdr.GetString("Name"),
+                Role = rdr.GetString("Role"),
+                Contact = rdr.GetString("Contact")
+            };
+        }
     }
+
 }

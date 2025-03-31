@@ -1,2 +1,3 @@
-﻿select StaffId, Name, Role, Contact
-from Staff
+﻿SELECT StaffId, Name, Role, Contact
+                                FROM Staff
+                                WHERE StaffId = 1

@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 IConfiguration conf = builder.Configuration;
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 string connStr = conf.GetConnectionString("ArtRentLocalDB");
 connStr = connStr.Replace("|DbDir|", builder.Environment.ContentRootPath);
 

@@ -1,4 +1,6 @@
-﻿using CW2.DAL.Entities;
+﻿using AutoMapper;
+using CW2.DAL.Entities;
+using CW2.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,24 +9,29 @@ namespace CW2.Controllers
     public class StaffController : Controller
     {
         private readonly IStaffRepository _staffRepository;
+        private readonly IMapper _mapper;
 
-        public StaffController(IStaffRepository staffRepository)
+        public StaffController(IStaffRepository staffRepository, IMapper mapper)
         {
             _staffRepository = staffRepository;
+            _mapper = mapper;
         }
 
         // GET: StaffController
         public ActionResult Index()
         {
-            var list = _staffRepository.GetAll();
+            var entities = _staffRepository.GetAll();
+            var models = entities.Select(e => _mapper.Map<StaffViewModel>(e));
 
-            return View(list);
+            return View(models);
         }
 
         // GET: StaffController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var staff = _staffRepository.GetById(id);
+            var model = _mapper.Map<StaffViewModel>(staff);
+            return View(model);
         }
 
         // GET: StaffController/Create
