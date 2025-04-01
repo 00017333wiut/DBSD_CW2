@@ -5,63 +5,68 @@ using System.Data.SqlClient;
 
 namespace CW2.DAL.Repositories
 {
-    public class AdoNetStaffRepository : IStaffRepository
+    public class AdoNetArtworkRepository : IArtworkRepository
     {
         private const string SELECT_ALL_SQL = @"
-                                SELECT StaffId, Name, Role, Contact
-                                FROM Staff";
+                        SELECT ArtworkID, Title, ArtistId, CategoryID, Year, RentalPrice, Availability, IsAvailable, ArtworkImage
+                        FROM Artwork";
 
         private const string SELECT_BY_ID = @"
-                                SELECT StaffId, Name, Role, Contact
-                                FROM Staff
-                                WHERE StaffId = @StaffId";
+                        SELECT ArtworkID, Title, ArtistId, CategoryID, Year, RentalPrice, Availability, IsAvailable, ArtworkImage
+                        FROM Artwork
+                        WHERE ArtworkID = @ArtworkID";
 
         private const string INSERT_SQL = @"
-                                INSERT INTO Staff (Name, Role, Contact)
-                                VALUES (@Name, @Role, @Contact);
-                                SELECT SCOPE_IDENTITY();";
+                        INSERT INTO Artwork (Title, ArtistId, CategoryID, Year, RentalPrice, Availability, IsAvailable, ArtworkImage)
+                        VALUES (@Title, @ArtistId, @CategoryID, @Year, @RentalPrice, @Availability, @IsAvailable, @ArtworkImage);
+                        SELECT SCOPE_IDENTITY();";
 
         private const string UPDATE_SQL = @"
-                                UPDATE Staff
+                                UPDATE Artwork
                                 SET 
                                     Name  = @Name,
                                     Role  = @Role,
                                     Contact = @Contact
-                                WHERE StaffId = @StaffId";
+                                WHERE ArtworkId = @ArtworkId";
 
         private const string DELETE_SQL = @"
-                                DELETE FROM Staff 
-                                WHERE StaffId = @StaffId";
+                                DELETE FROM Artwork 
+                                WHERE ArtworkId = @ArtworkId";
 
 
         private readonly string _connStr;
 
-        public AdoNetStaffRepository(string connStr)
+        public AdoNetArtworkRepository(string connStr)
         {
             _connStr = connStr;
         }
 
 
-        public void Delete(Staff staff)
+        public void Delete(Artwork artwork)
         {
             using var conn = new SqlConnection(_connStr);
             using var cmd = conn.CreateCommand();
             cmd.CommandText = DELETE_SQL;
-            cmd.Parameters.AddWithValue("StaffId", staff.StaffId);
+            cmd.Parameters.AddWithValue("ArtworkId", artwork.ArtworkId);
 
             conn.Open();
 
             cmd.ExecuteNonQuery();
         }
 
-        public IList<Staff> Filter(string? name, string? role, string? contact, int page = 1, int pageSize = 3, string sortColumn = "StaffId", bool sortDesc = false)
+        public IList<Artwork> Filter(string? name, string? role, string? contact, int page = 1, int pageSize = 3, string sortColumn = "ArtworkId", bool sortDesc = false)
         {
             throw new NotImplementedException();
         }
 
-        public IList<Staff> GetAll()
+        public IList<Artwork> Filter(string? title, string? artist, int? categoryId, int? year, decimal? minRentalPrice, decimal? maxRentalPrice, bool? isAvailable, int page = 1, int pageSize = 10, string sortColumn = "ArtworkID", bool sortDesc = false)
         {
-            var list = new List<Staff>();
+            throw new NotImplementedException();
+        }
+
+        public IList<Artwork> GetAll()
+        {
+            var list = new List<Artwork>();
 
             using var conn = new SqlConnection(_connStr);
             var cmd = conn.CreateCommand();
@@ -72,63 +77,75 @@ namespace CW2.DAL.Repositories
 
             while (rdr.Read())
             {
-                var staff = MapReader(rdr);
+                var artwork = MapReader(rdr);
 
-                list.Add(staff);
+                list.Add(artwork);
             }
             return list;
         }
 
-        public Staff GetById(int id)
+        public Artwork GetById(int id)
         {
             using var conn = new SqlConnection(_connStr);
             var cmd = conn.CreateCommand();
             cmd.CommandText = SELECT_BY_ID;
 
-            var pStaffId = cmd.CreateParameter();
-            pStaffId.ParameterName = "StaffID";
-            pStaffId.Value = id;
-            pStaffId.DbType = DbType.Int32;
-            pStaffId.Direction = ParameterDirection.Input;
-            cmd.Parameters.Add(pStaffId);
+            var pArtworkId = cmd.CreateParameter();
+            pArtworkId.ParameterName = "ArtworkID";
+            pArtworkId.Value = id;
+            pArtworkId.DbType = DbType.Int32;
+            pArtworkId.Direction = ParameterDirection.Input;
+            cmd.Parameters.Add(pArtworkId);
 
             conn.Open();
 
             using var rdr = cmd.ExecuteReader();
-            Staff? staff = null;
+            Artwork? artwork = null;
             if (rdr.Read())
             {
-                staff = MapReader(rdr);
+                artwork = MapReader(rdr);
             }
-            return staff;
+            return artwork;
 
         }
 
-        public Staff Insert(Staff staff)
+        public Artwork Insert(Artwork artwork)
         {
             using var conn = new SqlConnection(_connStr);
             using var cmd = conn.CreateCommand();
             cmd.CommandText = INSERT_SQL;
-            cmd.Parameters.AddWithValue("Name", staff.Name);
-            cmd.Parameters.AddWithValue("Role", staff.Role);
-            cmd.Parameters.AddWithValue("Contact", staff.Contact ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("Title", artwork.Title);
+            cmd.Parameters.AddWithValue("ArtistId", artwork.ArtistId);
+            cmd.Parameters.AddWithValue("CategoryID", artwork.CategoryId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("Year", artwork.Year ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("RentalPrice", artwork.RentalPrice);
+            cmd.Parameters.AddWithValue("Availability", artwork.Availability ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("IsAvailable", artwork.IsAvailable);
+            cmd.Parameters.AddWithValue("ArtworkImage", artwork.ArtworkImage ?? (object)DBNull.Value);
 
             conn.Open();
             int id = Convert.ToInt32(cmd.ExecuteScalar());
-            staff.StaffId = id;
+            artwork.ArtworkId = id;
 
-            return staff;
+            return artwork;
         }
 
-        public void Update(Staff staff)
+        public void Update(Artwork artwork)
         {
             using var conn = new SqlConnection(_connStr);
             using var cmd = conn.CreateCommand();
             cmd.CommandText = UPDATE_SQL;
-            cmd.Parameters.AddWithValue("Name", staff.Name);
-            cmd.Parameters.AddWithValue("Role", staff.Role);
-            cmd.Parameters.AddWithValue("Contact", staff.Contact ?? (object)DBNull.Value);
-            cmd.Parameters.AddWithValue("StaffId", staff.StaffId);
+
+            cmd.Parameters.AddWithValue("Title", artwork.Title);
+            cmd.Parameters.AddWithValue("ArtistId", artwork.ArtistId);
+            cmd.Parameters.AddWithValue("CategoryID", artwork.CategoryId ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("Year", artwork.Year ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("RentalPrice", artwork.RentalPrice);
+            cmd.Parameters.AddWithValue("Availability", artwork.Availability ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("IsAvailable", artwork.IsAvailable);
+            cmd.Parameters.AddWithValue("ArtworkImage", artwork.ArtworkImage ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("ArtworkID", artwork.ArtworkId);
+
 
             conn.Open();
 
@@ -136,14 +153,20 @@ namespace CW2.DAL.Repositories
         }
 
 
-        private Staff MapReader(DbDataReader rdr)
+        private Artwork MapReader(DbDataReader rdr)
         {
-            return new Staff()
+            return new Artwork()
             {
-                StaffId = rdr.GetInt32("StaffID"),
-                Name = rdr.GetString("Name"),
-                Role = rdr.GetString("Role"),
-                Contact = rdr.GetString("Contact")
+                ArtworkId = rdr.GetInt32("ArtworkID"), 
+                Title = rdr.GetString("Title"), 
+                ArtistId = rdr.IsDBNull("ArtistID") ? null : rdr.GetInt32("ArtistID"),
+                CategoryId = rdr.IsDBNull("CategoryID") ? null : rdr.GetInt32("CategoryID"), // CategoryID
+                Year = rdr.IsDBNull("Year") ? null : rdr.GetInt32("Year"), 
+                RentalPrice = rdr.GetDecimal("RentalPrice"), 
+                Availability = rdr.IsDBNull("Availability") ? null : rdr.GetDateTime("Availability"), // Availability
+                IsAvailable = rdr.GetBoolean("IsAvailable"), 
+                ArtworkImage = rdr.IsDBNull("ArtworkImage") ? null : (byte[])rdr["ArtworkImage"] // ArtworkImage
+
             };
         }
     }

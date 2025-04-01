@@ -7,7 +7,7 @@ namespace CW2.Infrastructure
     public class MappingProfile : Profile
     {
         public MappingProfile() { 
-        CreateMap<Staff, StaffViewModel>().ReverseMap();
+        CreateMap<Artwork, ArtworkViewModel>().ReverseMap();
         }
     }
 }
