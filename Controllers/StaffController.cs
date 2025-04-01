@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
 using CW2.DAL.Entities;
+using CW2.DAL.Repositories;
 using CW2.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace CW2.Controllers
 {
@@ -43,17 +47,23 @@ namespace CW2.Controllers
         // POST: StaffController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(StaffViewModel model)
         {
             try
             {
+                var staff = _mapper.Map<Staff>(model);
+                _staffRepository.Insert(staff);
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError(string.Empty, ex.Message);
+
                 return View();
             }
         }
+    
 
         // GET: StaffController/Edit/5
         public ActionResult Edit(int id)

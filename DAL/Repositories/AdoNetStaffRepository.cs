@@ -18,8 +18,8 @@ namespace CW2.DAL.Repositories
 
         private const string INSERT_SQL = @"
                                 INSERT INTO Staff (Name, Role, Contact)
-                                OUTPUT inserted.StaffId
-                                VALUES (@Name, @Role, @Contact)";
+                                VALUES (@Name, @Role, @Contact);
+                                SELECT SCOPE_IDENTITY();";
 
         private const string UPDATE_SQL = @"
                                 UPDATE Staff
@@ -114,7 +114,7 @@ namespace CW2.DAL.Repositories
             cmd.Parameters.AddWithValue("Contact", staff.Contact ?? (object)DBNull.Value);
 
             conn.Open();
-            int id = (int)cmd.ExecuteScalar();
+            int id = Convert.ToInt32(cmd.ExecuteScalar());
             staff.StaffId = id;
 
             return staff;
