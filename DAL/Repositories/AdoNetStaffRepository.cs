@@ -8,7 +8,7 @@ namespace CW2.DAL.Repositories
     public class AdoNetArtworkRepository : IArtworkRepository
     {
         private const string SELECT_ALL_SQL = @"
-                        SELECT ArtworkID, Title, ArtistId, CategoryID, Year, RentalPrice, Availability, IsAvailable, ArtworkImage
+                        SELECT ArtworkID, Title, ArtistID, CategoryID, Year, RentalPrice, Availability, IsAvailable, ArtworkImage
                         FROM Artwork";
 
         private const string SELECT_BY_ID = @"
@@ -22,16 +22,21 @@ namespace CW2.DAL.Repositories
                         SELECT SCOPE_IDENTITY();";
 
         private const string UPDATE_SQL = @"
-                                UPDATE Artwork
-                                SET 
-                                    Name  = @Name,
-                                    Role  = @Role,
-                                    Contact = @Contact
-                                WHERE ArtworkId = @ArtworkId";
+                        UPDATE Artwork
+                        SET
+                            Title = @Title,
+                            ArtistID = @ArtistID,
+                            CategoryID = @CategoryID,
+                            Year = @Year,
+                            RentalPrice = @RentalPrice,
+                            Availability = @Availability,
+                            IsAvailable = @IsAvailable,
+                            ArtworkImage = @ArtworkImage
+                        WHERE ArtworkID = @ArtworkID;";
 
         private const string DELETE_SQL = @"
-                                DELETE FROM Artwork 
-                                WHERE ArtworkId = @ArtworkId";
+                            DELETE FROM Artwork
+                            WHERE ArtworkID = @ArtworkID;";
 
 
         private readonly string _connStr;
@@ -50,7 +55,6 @@ namespace CW2.DAL.Repositories
             cmd.Parameters.AddWithValue("ArtworkId", artwork.ArtworkId);
 
             conn.Open();
-
             cmd.ExecuteNonQuery();
         }
 
@@ -114,6 +118,7 @@ namespace CW2.DAL.Repositories
             using var conn = new SqlConnection(_connStr);
             using var cmd = conn.CreateCommand();
             cmd.CommandText = INSERT_SQL;
+
             cmd.Parameters.AddWithValue("Title", artwork.Title);
             cmd.Parameters.AddWithValue("ArtistId", artwork.ArtistId);
             cmd.Parameters.AddWithValue("CategoryID", artwork.CategoryId ?? (object)DBNull.Value);
@@ -137,7 +142,7 @@ namespace CW2.DAL.Repositories
             cmd.CommandText = UPDATE_SQL;
 
             cmd.Parameters.AddWithValue("Title", artwork.Title);
-            cmd.Parameters.AddWithValue("ArtistId", artwork.ArtistId);
+            cmd.Parameters.AddWithValue("ArtistID", artwork.ArtistId);
             cmd.Parameters.AddWithValue("CategoryID", artwork.CategoryId ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("Year", artwork.Year ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("RentalPrice", artwork.RentalPrice);
@@ -148,7 +153,6 @@ namespace CW2.DAL.Repositories
 
 
             conn.Open();
-
             cmd.ExecuteNonQuery();
         }
 

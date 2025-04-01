@@ -68,16 +68,20 @@ namespace CW2.Controllers
         // GET: ArtworkController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var artwork = _artworkRepository.GetById(id);
+            var model = _mapper.Map<ArtworkViewModel>(artwork);
+            return View(model);
         }
 
         // POST: ArtworkController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, ArtworkViewModel model)
         {
             try
             {
+                var artwork = _mapper.Map<Artwork>(model);
+                _artworkRepository.Update(artwork);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -89,20 +93,27 @@ namespace CW2.Controllers
         // GET: ArtworkController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var artwork = _artworkRepository.GetById(id);
+            return View(_mapper.Map<ArtworkViewModel>(artwork));
         }
 
         // POST: ArtworkController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, ArtworkViewModel model)
         {
             try
             {
+                var artwork = _mapper.Map<Artwork>(model);
+                artwork.ArtworkId = id;
+                _artworkRepository.Delete(artwork);
+
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                ModelState.AddModelError(string.Empty, ex.Message);
+
                 return View();
             }
         }
