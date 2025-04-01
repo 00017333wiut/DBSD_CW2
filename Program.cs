@@ -13,8 +13,13 @@ builder.Services.AddAutoMapper(typeof(Program));
 string connStr = conf.GetConnectionString("ArtRentLocalDB");
 connStr = connStr.Replace("|DbDir|", builder.Environment.ContentRootPath);
 
-builder.Services.AddSingleton<IArtworkRepository>
-    (s => new AdoNetArtworkRepository(connStr));
+//builder.Services.AddSingleton<IArtworkRepository>
+//    (s => new AdoNetArtworkRepository(connStr));
+
+builder.Services.AddSingleton<IArtworkRepository>(
+    s => new DapperStoredProcArtworkRepository(connStr)
+    );
+
 
 builder.Services.AddControllersWithViews();
 
