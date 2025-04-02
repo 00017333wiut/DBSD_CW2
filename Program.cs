@@ -13,11 +13,19 @@ builder.Services.AddAutoMapper(typeof(Program));
 string connStr = conf.GetConnectionString("ArtRentLocalDB");
 connStr = connStr.Replace("|DbDir|", builder.Environment.ContentRootPath);
 
+////Ado.Net
 //builder.Services.AddSingleton<IArtworkRepository>
 //    (s => new AdoNetArtworkRepository(connStr));
 
+
+////DapperStoredProcedure
+//builder.Services.AddSingleton<IArtworkRepository>(
+//    s => new DapperStoredProcArtworkRepository(connStr)
+//    );
+
+//Dapper
 builder.Services.AddSingleton<IArtworkRepository>(
-    s => new DapperStoredProcArtworkRepository(connStr)
+    s => new DapperArtworkRepository(connStr)
     );
 
 

@@ -38,10 +38,19 @@ namespace CW2.DAL.Repositories
         private const string DELETE_SQL = @"
                             DELETE FROM Artwork
                             WHERE ArtworkID = @ArtworkID;";
+        private const string FILTER_SQL = @"
+                            select ArtworkID, Title, ArtistID, CategoryID, Year, RentalPrice, Availability, IsAvailable
+                            from Artwork
+                            where Title like concat(@Title, '%')
+                              and Availability >= coalesce(@Availability, '1900-01-01')
+                              and (@ArtistID = 0 OR ArtistID = @ArtistID) 
+                            order by {0}
+                            offset (@Page-1)*@PageSize rows fetch next @PageSize rows only";
+
         #endregion sql constants
 
         private readonly string _connStr;
-        private readonly IList<string> ALLOWED_SORT_COLUMNS = new List<string>() { "ArtworkId", "FirstName" };
+        private readonly IList<string> ALLOWED_SORT_COLUMNS = new List<string>() { "ArtworkId", "Title" };
 
         public DapperArtworkRepository(string connStr)
         {
@@ -53,59 +62,34 @@ namespace CW2.DAL.Repositories
             using var conn = new SqlConnection(_connStr);
             conn.Execute(DELETE_SQL, new { employee.ArtworkId });
         }
-
-        public string ExportToJson(string? firstName, DateTime? birthDate, string sortColumn = "ArtworkId", bool sortDesc = false)
+        public IList<Artwork> Filter(string? title, DateTime? availability, int artistId, int page = 1, int pageSize = 10, string sortColumn = "ArtworkID", bool sortDesc = false)
         {
-            throw new NotImplementedException();
+
+
+            page = page > 0 ? page : 1;  
+            pageSize = pageSize > 0 ? pageSize : 10;
+
+            if (!ALLOWED_SORT_COLUMNS.Contains(sortColumn))
+            {
+                sortColumn = "ArtworkId";
+            }
+
+            string sql = string.Format(FILTER_SQL, sortColumn + (sortDesc ? " DESC " : " ASC "));
+
+            using var conn = new SqlConnection(_connStr);
+            return conn.Query<Artwork>(sql,
+                new
+                {
+                    ArtistID = artistId,
+                    Title = title,
+                    Availability = availability as DateTime?, 
+                    Page = page,
+                    PageSize = pageSize,
+                    //SortColumn = sortColumn,
+
+                }
+                ).ToList();
         }
-
-        public string ExportToXml(string? firstName, DateTime? birthDate, string sortColumn = "ArtworkId", bool sortDesc = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Artwork> Filter(string? title, string? artistId, int? categoryId, int? year, decimal? minRentalPrice, decimal? maxRentalPrice, bool? isAvailable, int page = 1, int pageSize = 10, string sortColumn = "ArtworkID", bool sortDesc = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public IList<Artwork> Filter(string? firstName,
-        //                              DateTime? birthDate,
-        //                              int[]? reportsToIds,
-        //                              int page = 1,
-        //                              int pageSize = 3,
-        //                              string sortColumn = "ArtworkId",
-        //                              bool sortDesc = false)
-        //{
-        //    if (page < 1)
-        //    {
-        //        page = 1;
-        //    }
-
-        //    if (reportsToIds == null)
-        //    {
-        //        reportsToIds = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        //    }
-
-        //    if (!ALLOWED_SORT_COLUMNS.Contains(sortColumn))
-        //    {
-        //        sortColumn = "ArtworkId";
-        //    }
-
-        //    string sql = string.Format(FILTER_SQL, sortColumn + (sortDesc ? " DESC " : " ASC "));
-
-        //    using var conn = new SqlConnection(_connStr);
-        //    return conn.Query<Artwork>(sql,
-        //                                new
-        //                                {
-        //                                    FirstName = firstName,
-        //                                    BirthDate = birthDate,
-        //                                    ReportsToIds = reportsToIds,
-        //                                    Page = page,
-        //                                    PageSize = pageSize,
-        //                                }
-        //        ).ToList();
-        //}
 
         public IList<Artwork> GetAll()
         {

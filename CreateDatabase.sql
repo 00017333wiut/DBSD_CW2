@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS Location;
 -- Create Customers Table
 CREATE TABLE Customers (
     CustomerID INT IDENTITY(1,1) PRIMARY KEY,
-    FirstName VARCHAR(100) NOT NULL,
+    Title VARCHAR(100) NOT NULL,
     LastName VARCHAR(100) NOT NULL,
     Contact VARCHAR(100),
     Email VARCHAR(100),
@@ -131,7 +131,7 @@ CREATE TABLE CustomerContact (
 -- INSERTING SAMPLE DATA
 
 -- Insert Customers
-INSERT INTO Customers (FirstName, LastName, Contact, Email, Street, City, State, PostalCode) VALUES
+INSERT INTO Customers (Title, LastName, Contact, Email, Street, City, State, PostalCode) VALUES
 ('John', 'Doe', '123-456-7890', 'john.doe@example.com', '123 Main St', 'New York', 'NY', '10001'),
 ('Alice', 'Smith', '987-654-3210', 'alice.smith@example.com', '234 Oak St', 'Los Angeles', 'CA', '90001'),
 ('Michael', 'Brown', '555-333-2222', 'michael.b@example.com', '789 Pine St', 'Chicago', 'IL', '60601'),
