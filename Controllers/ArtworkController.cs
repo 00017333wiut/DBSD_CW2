@@ -117,5 +117,11 @@ namespace CW2.Controllers
                 return View();
             }
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            _artworkRepository.Dispose();
+        }
     }
 }

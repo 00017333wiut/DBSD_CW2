@@ -13,18 +13,32 @@ builder.Services.AddAutoMapper(typeof(Program));
 string connStr = conf.GetConnectionString("ArtRentLocalDB");
 connStr = connStr.Replace("|DbDir|", builder.Environment.ContentRootPath);
 
+
+builder.Services.AddDbContext<DbContext>(options =>
+    options.UseSqlServer(connStr)
+               .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole().AddDebug()))
+
+    );
+
 //builder.Services.AddSingleton<IArtworkRepository>
 //    (s => new AdoNetArtworkRepository(connStr));
 
+/*builder.Services.AddSingleton<IArtworkRepository>(
+    s => new DapperStoredProcArtworkRepository(connStr)
+    );
+*/
 builder.Services.AddSingleton<IArtworkRepository>(
     s => new DapperStoredProcArtworkRepository(connStr)
     );
 
 
+// builder.Services.AddScoped<IEmployeeRepository, EfEmployeeRepository>();
+
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
 
+var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.

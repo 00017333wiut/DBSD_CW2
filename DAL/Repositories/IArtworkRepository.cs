@@ -3,7 +3,7 @@
 namespace CW2.DAL.Entities
 {
    
-        public interface IArtworkRepository
+        public interface IArtworkRepository : IDisposable
         {
             IList<Artwork> GetAll();
             Artwork? GetById(int id);
@@ -21,6 +21,11 @@ namespace CW2.DAL.Entities
                                           int pageSize = 10,
                                           string sortColumn = "ArtworkID",
                                           bool sortDesc = false);
+         void IDisposable.Dispose()
+        {
+            //no implementation
+        }
+
         }
     }
 
