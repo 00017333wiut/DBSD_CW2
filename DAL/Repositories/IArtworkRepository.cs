@@ -10,6 +10,19 @@ namespace CW2.DAL.Entities
             Artwork? Insert(Artwork artwork);
             void Update(Artwork artwork);
             void Delete(Artwork artwork);
+            IList<Artwork> Filter(  string? title,
+                                     DateTime? availability,
+                                     int artistId,
+                                     int page = 1,
+                                     int pageSize = 10,
+                                     string sortColumn = "ArtworkID",
+                                     bool sortDesc = false);
+            //IEnumerable<Artwork> Filter(string? title,
+            //                            int artistId,
+            //                            DateTime? availabitity,
+            //                            int page,
+            //                            int pageSize);
+    }
             IList<Artwork> Filter(string? title,
                                           string? artistId,
                                           int? categoryId,

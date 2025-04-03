@@ -1,0 +1,105 @@
+﻿@model CW2.Models.ArtworkFilterViewModel
+
+@{
+    ViewData["Title"] = "Filter";
+}
+
+<h1>Filter</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Filter" method="get">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Availability" class="control-label"></label>
+                <input asp-for="Availability" class="form-control" type="date" />
+                <span asp-validation-for="Availability" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Filter" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Artwork.FirstOrDefault().ArtworkId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Artwork.FirstOrDefault().Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Artwork.FirstOrDefault().ArtistId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Artwork.FirstOrDefault().CategoryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Artwork.FirstOrDefault().Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Artwork.FirstOrDefault().RentalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Availability)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Artwork.FirstOrDefault().IsAvailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Artwork.FirstOrDefault().ArtworkImage)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Artwork) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArtworkId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArtistId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RentalPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Availability)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAvailable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArtworkImage)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

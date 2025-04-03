@@ -10,7 +10,7 @@ namespace CW2.DAL.Repositories
 {
     public class DapperStoredProcArtworkRepository : IArtworkRepository
     {
-        private readonly IList<string> ALLOWED_SORT_COLUMNS = new List<string>() { "ArtworkId", "FirstName" };
+        private readonly IList<string> ALLOWED_SORT_COLUMNS = new List<string>() { "ArtworkId", "Title" };
 
         private readonly string _connStr;
 
@@ -23,65 +23,18 @@ namespace CW2.DAL.Repositories
         {
             throw new NotImplementedException();
         }
+       
 
-        public IList<Artwork> Filter(string? title, string? artistId, int? categoryId, int? year, decimal? minRentalPrice, decimal? maxRentalPrice, bool? isAvailable, int page = 1, int pageSize = 10, string sortColumn = "ArtworkID", bool sortDesc = false)
+        public IList<Artwork> Filter(string? title,
+                                     DateTime? availability,
+                                     int artistId,
+                                     int page = 1,
+                                     int pageSize = 10,
+                                     string sortColumn = "ArtworkID",
+                                     bool sortDesc = false)
         {
             throw new NotImplementedException();
         }
-
-        //public string ExportToJson(string? firstName, DateTime? birthDate, string sortColumn = "ArtworkId", bool sortDesc = false)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public string ExportToXml(string? firstName,
-        //                          DateTime? birthDate,
-        //                          string sortColumn = "ArtworkId",
-        //                          bool sortDesc = false)
-        //{
-        //    using var conn = new SqlConnection(_connStr);
-        //    return conn.ExecuteScalar<string>(
-        //        "udpExportArtworksToXml    ",
-        //        new { firstName, birthDate, sortColumn, sortDesc }) ?? "";
-        //}
-
-        //public IList<Artwork> Filter(string? firstName,
-        //                              DateTime? birthDate,
-        //                              int[]? reportsToIds,
-        //                              int page = 1,
-        //                              int pageSize = 3,
-        //                              string sortColumn = "ArtworkId",
-        //                              bool sortDesc = false)
-        //{
-        //    if (page < 1)
-        //    {
-        //        page = 1;
-        //    }
-
-        //    if (reportsToIds == null)
-        //    {
-        //        reportsToIds = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        //    }
-
-        //    if (!ALLOWED_SORT_COLUMNS.Contains(sortColumn))
-        //    {
-        //        sortColumn = "ArtworkId";
-        //    }
-
-
-        //    using var conn = new SqlConnection(_connStr);
-        //    return conn.Query<Artwork>("udpFilterArtworks",
-        //                                new
-        //                                {
-        //                                    FirstName = firstName,
-        //                                    BirthDate = birthDate,
-        //                                    Page = page,
-        //                                    PageSize = pageSize,
-        //                                    SortColumn = sortColumn,
-        //                                    SortDesc = sortDesc
-        //                                }
-        //        ).ToList();
-        //}
 
         public IList<Artwork> GetAll()
         {

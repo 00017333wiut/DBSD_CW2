@@ -15,11 +15,14 @@ namespace CW2.Controllers
         private readonly IArtworkRepository _artworkRepository;
         private readonly IMapper _mapper;
 
+        //Constructor
         public ArtworkController(IArtworkRepository artworkRepository, IMapper mapper)
         {
             _artworkRepository = artworkRepository;
             _mapper = mapper;
         }
+
+        //-----INDEX-----
 
         // GET: ArtworkController
         public ActionResult Index()
@@ -30,6 +33,8 @@ namespace CW2.Controllers
             return View(models);
         }
 
+        //-----DETAILS-----
+
         // GET: ArtworkController/Details/5
         public ActionResult Details(int id)
         {
@@ -37,6 +42,8 @@ namespace CW2.Controllers
             var model = _mapper.Map<ArtworkViewModel>(artwork);
             return View(model);
         }
+
+        //-----CREATE-----
 
         // GET: ArtworkController/Create
         public ActionResult Create()
@@ -63,7 +70,9 @@ namespace CW2.Controllers
                 return View();
             }
         }
-    
+
+
+        //-----EDIT-----
 
         // GET: ArtworkController/Edit/5
         public ActionResult Edit(int id)
@@ -89,6 +98,8 @@ namespace CW2.Controllers
                 return View();
             }
         }
+
+        //-----DELETE-----
 
         // GET: ArtworkController/Delete/5
         public ActionResult Delete(int id)
@@ -117,6 +128,27 @@ namespace CW2.Controllers
                 return View();
             }
         }
+
+        //-----FILTER-----
+
+        //GET
+        public ActionResult Filter(ArtworkFilterViewModel filter)
+        {
+            var entities = _artworkRepository.Filter(
+                filter.Title,
+                filter.Availability,
+                filter.ArtistId,
+                filter.Page,
+                filter.PageSize,
+                filter.SortColumn,
+                filter.SortDesc
+            );
+
+            filter.Artwork = entities.Select(_mapper.Map<ArtworkViewModel>);
+            return View(filter);
+        }
+        //POST
+
 
         protected override void Dispose(bool disposing)
         {

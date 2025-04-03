@@ -28,7 +28,7 @@ builder.Services.AddDbContext<DbContext>(options =>
     );
 */
 builder.Services.AddSingleton<IArtworkRepository>(
-    s => new DapperStoredProcArtworkRepository(connStr)
+    s => new DapperArtworkRepository(connStr)
     );
 
 

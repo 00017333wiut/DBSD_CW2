@@ -58,12 +58,7 @@ namespace CW2.DAL.Repositories
             cmd.ExecuteNonQuery();
         }
 
-        public IList<Artwork> Filter(string? name, string? role, string? contact, int page = 1, int pageSize = 3, string sortColumn = "ArtworkId", bool sortDesc = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Artwork> Filter(string? title, string? artist, int? categoryId, int? year, decimal? minRentalPrice, decimal? maxRentalPrice, bool? isAvailable, int page = 1, int pageSize = 10, string sortColumn = "ArtworkID", bool sortDesc = false)
+        public IList<Artwork> Filter(string? title, DateTime? availability, int artistId, int page = 1, int pageSize = 10, string sortColumn = "ArtworkID", bool sortDesc = false)
         {
             throw new NotImplementedException();
         }
