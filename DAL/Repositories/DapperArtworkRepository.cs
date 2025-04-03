@@ -62,6 +62,12 @@ namespace CW2.DAL.Repositories
             using var conn = new SqlConnection(_connStr);
             conn.Execute(DELETE_SQL, new { employee.ArtworkId });
         }
+
+        public IList<Artwork> EfFilter(string? title, string? artistId, int? categoryId, int? year, decimal? minRentalPrice, decimal? maxRentalPrice, bool? isAvailable, int page = 1, int pageSize = 10, string sortColumn = "ArtworkID", bool sortDesc = false)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<Artwork> Filter(string? title, DateTime? availability, int artistId, int page = 1, int pageSize = 10, string sortColumn = "ArtworkID", bool sortDesc = false)
         {
 

@@ -19,7 +19,7 @@ namespace CW2.DAL.Repositories
             _dbContext.SaveChanges();
         }
 
-        public IList<Artwork> Filter(string? title,
+        public IList<Artwork> EfFilter(string? title,
                                      string? artistId,
                                      int? categoryId,
                                      int? year,
@@ -149,5 +149,9 @@ namespace CW2.DAL.Repositories
             _dbContext?.Dispose();
         }
 
+        public IList<Artwork> Filter(string? title, DateTime? availability, int artistId, int page = 1, int pageSize = 10, string sortColumn = "ArtworkID", bool sortDesc = false)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
