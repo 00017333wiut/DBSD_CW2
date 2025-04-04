@@ -6,8 +6,13 @@ namespace CW2.Infrastructure
 {
     public class MappingProfile : Profile
     {
-        public MappingProfile() { 
+        public MappingProfile() 
+        { 
         CreateMap<Artwork, ArtworkViewModel>().ReverseMap();
+        CreateMap<Customer, CustomerViewModel>().ReverseMap();
+            CreateMap<Customer, CustomerViewModel>();
         }
     }
+
+
 }

@@ -6,9 +6,9 @@ namespace CW2.DAL.Repositories
 {
     public class EfArtworkRepository : IArtworkRepository
     {
-        private readonly ArtworkDbContext _dbContext;
+        private readonly ArtRentDbContext _dbContext;
 
-        public EfArtworkRepository(ArtworkDbContext dbContext)
+        public EfArtworkRepository(ArtRentDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -150,6 +150,11 @@ namespace CW2.DAL.Repositories
         }
 
         public IList<Artwork> Filter(string? title, DateTime? availability, int artistId, int page = 1, int pageSize = 10, string sortColumn = "ArtworkID", bool sortDesc = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Artwork> Filter(string? title, string? artistId, int? categoryId, int? year, decimal? minRentalPrice, decimal? maxRentalPrice, bool? isAvailable, int page = 1, int pageSize = 10, string sortColumn = "ArtworkID", bool sortDesc = false)
         {
             throw new NotImplementedException();
         }
