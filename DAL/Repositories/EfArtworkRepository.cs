@@ -153,5 +153,15 @@ namespace CW2.DAL.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public string ExportToXml(string? title = null, int? year = null, string sortColumn = "ArtworkID", bool sortDesc = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ExportToJson(string? title = null, int? year = null, string sortColumn = "ArtworkID", bool sortDesc = false)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -5,6 +5,7 @@ using CW2.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -150,10 +151,63 @@ namespace CW2.Controllers
         //POST
 
 
+        //-----EXPORT------
+
+        public ActionResult ExportXml(string? title = null,
+                             int? artistId = null,
+                             int? categoryId = null,
+                             int? year = null,
+                             string sortColumn = "ArtworkID",
+                             bool sortDesc = false)
+        {
+            var xml = _artworkRepository.ExportToXml(title, year, sortColumn, sortDesc);
+
+            if (string.IsNullOrWhiteSpace(xml))
+                return NotFound();
+            else
+                return File(Encoding.UTF8.GetBytes(xml),
+                           "application/xml",
+                           $"Artworks_{DateTime.Now:yyyyMMdd}.xml");
+        }
+
+        public ActionResult ExportJson(string? title = null,
+                                     int? artistId = null,
+                                     int? categoryId = null,
+                                     int? year = null,
+                                     string sortColumn = "ArtworkID",
+                                     bool sortDesc = false)
+        {
+            var json = _artworkRepository.ExportToJson(title, year, sortColumn, sortDesc);
+
+            if (string.IsNullOrWhiteSpace(json))
+                return NotFound();
+            else
+                return File(Encoding.UTF8.GetBytes(json),
+                           "application/json",
+                           $"Artworks_{DateTime.Now:yyyyMMdd}.json");
+        }
+
+        public ActionResult ExportJson(
+            string? title = null,
+            int? year = null,
+            string sortColumn = "ArtworkID",
+            bool sortDesc = false)
+        {
+            var json = _artworkRepository.ExportToJson(title, year, sortColumn, sortDesc);
+
+            if (string.IsNullOrWhiteSpace(json))
+                return NotFound();
+
+            return File(Encoding.UTF8.GetBytes(json),
+                "application/json",
+                $"Artworks_{DateTime.Now:yyyyMMdd}.json");
+        }
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
             _artworkRepository.Dispose();
+
         }
     }
 }

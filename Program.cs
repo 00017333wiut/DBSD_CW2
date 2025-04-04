@@ -23,13 +23,13 @@ builder.Services.AddDbContext<DbContext>(options =>
 //builder.Services.AddSingleton<IArtworkRepository>
 //    (s => new AdoNetArtworkRepository(connStr));
 
-/*builder.Services.AddSingleton<IArtworkRepository>(
+builder.Services.AddSingleton<IArtworkRepository>(
     s => new DapperStoredProcArtworkRepository(connStr)
     );
-*/
-builder.Services.AddSingleton<IArtworkRepository>(
-    s => new DapperArtworkRepository(connStr)
-    );
+
+//builder.Services.AddSingleton<IArtworkRepository>(
+//    s => new DapperArtworkRepository(connStr)
+//    );
 
 
 // builder.Services.AddScoped<IEmployeeRepository, EfEmployeeRepository>();

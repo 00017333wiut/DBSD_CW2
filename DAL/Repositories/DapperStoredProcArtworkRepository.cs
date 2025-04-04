@@ -29,6 +29,53 @@ namespace CW2.DAL.Repositories
             throw new NotImplementedException();
         }
 
+        public string ExportToXml(string? title = null,
+                         int? year = null,
+                         string sortColumn = "ArtworkID",
+                         bool sortDesc = false)
+        {
+            using (var conn = new SqlConnection(_connStr))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Title", title);
+                p.Add("@Year", year);
+                p.Add("@SortColumn", sortColumn);
+                p.Add("@SortDesc", sortDesc);
+                p.Add("@XmlData", dbType: DbType.Xml, direction: ParameterDirection.Output);
+
+                conn.Execute(
+                    "udpArtworkExportAsXml",
+                    param: p,
+                    commandType: CommandType.StoredProcedure);
+
+                return p.Get<string>("@XmlData");
+            }
+        }
+
+        public string ExportToJson(
+            string? title = null,
+            int? year = null,
+            string sortColumn = "ArtworkID",
+            bool sortDesc = false)
+        {
+            using (var conn = new SqlConnection(_connStr))
+            {
+                var p = new DynamicParameters();
+                p.Add("@Title", title);
+                p.Add("@Year", year);
+                p.Add("@SortColumn", sortColumn);
+                p.Add("@SortDesc", sortDesc);
+                p.Add("@JsonData", dbType: DbType.String, direction: ParameterDirection.Output, size: -1);
+
+                conn.Execute(
+                    "udpArtworkExportAsJson",
+                    param: p,
+                    commandType: CommandType.StoredProcedure);
+
+                return p.Get<string>("@JsonData");
+            }
+        }
+
         public IList<Artwork> Filter(string? title,
                                      DateTime? availability,
                                      int artistId,

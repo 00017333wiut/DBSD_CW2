@@ -9,6 +9,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<p>
+    <a asp-action="Filter">Filter</a>
+</p>
 <table class="table">
     <thead>
         <tr>
@@ -75,9 +78,29 @@
             <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.ArtworkId }) |
                 @Html.ActionLink("Details", "Details", new { id = item.ArtworkId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ArtworkId })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ArtworkId }) |
+                        @Html.ActionLink("Export This to XML", "ExportXml",
+                                 new
+                                 {
+                                     title = item.Title,
+                                     year = item.Year
+                                 },
+                                 new { @class = "btn btn-sm btn-outline-secondary" })
             </td>
         </tr>
 }
+        <div class="export-links mt-3">
+            <h4>Export Options:</h4>
+            <div class="btn-group">
+                @Html.ActionLink("Export All to XML", "ExportXml",
+                         new { },
+                         new { @class = "btn btn-outline-primary" })
+                @Html.ActionLink("Export All to JSON", "ExportJson",
+                         new { },
+                         new { @class = "btn btn-outline-primary" })
+            </div>
+        </div>
+
+
     </tbody>
 </table>

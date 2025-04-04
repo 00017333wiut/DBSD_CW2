@@ -10,6 +10,15 @@ namespace CW2.DAL.Entities
         Artwork? Insert(Artwork artwork);
         void Update(Artwork artwork);
         void Delete(Artwork artwork);
+        string ExportToXml(string? title = null,
+                           int? year = null,
+                           string sortColumn = "ArtworkID",
+                           bool sortDesc = false);
+        string ExportToJson(string? title = null,
+                           int? year = null,
+                           string sortColumn = "ArtworkID",
+                           bool sortDesc = false);
+        
         IList<Artwork> Filter(string? title,
                                  DateTime? availability,
                                  int artistId,
@@ -17,12 +26,7 @@ namespace CW2.DAL.Entities
                                  int pageSize = 10,
                                  string sortColumn = "ArtworkID",
                                  bool sortDesc = false);
-        //IEnumerable<Artwork> Filter(string? title,
-        //                            int artistId,
-        //                            DateTime? availabitity,
-        //                            int page,
-        //                            int pageSize);
-
+     
         IList<Artwork> EfFilter(string? title,
                                       string? artistId,
                                       int? categoryId,
@@ -38,6 +42,7 @@ namespace CW2.DAL.Entities
         {
             //no implementation
         }
+
 
 
     }

@@ -45,7 +45,7 @@ CREATE TABLE Staff (
     Contact VARCHAR(15)
 );
 
--- Create Artwork Table (corrected)
+-- Create Artwork Table
 CREATE TABLE Artwork (
     ArtworkID INT IDENTITY(1,1) PRIMARY KEY,
     Title VARCHAR(100) NOT NULL,
