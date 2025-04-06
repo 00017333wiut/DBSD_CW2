@@ -6,9 +6,9 @@ namespace CW2.DAL.Repositories
 {
     public class EfArtworkRepository : IArtworkRepository
     {
-        private readonly ArtworkDbContext _dbContext;
+        private readonly ArtRentDbContext _dbContext;
 
-        public EfArtworkRepository(ArtworkDbContext dbContext)
+        public EfArtworkRepository(ArtRentDbContext dbContext)
         {
             _dbContext = dbContext;
         }

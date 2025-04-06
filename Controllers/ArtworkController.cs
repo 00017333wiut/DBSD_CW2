@@ -13,6 +13,8 @@ namespace CW2.Controllers
 {
     public class ArtworkController : Controller
     {
+
+
         private readonly IArtworkRepository _artworkRepository;
         private readonly IMapper _mapper;
 
@@ -21,6 +23,8 @@ namespace CW2.Controllers
         {
             _artworkRepository = artworkRepository;
             _mapper = mapper;
+            _artworkRepository = artworkRepository ?? throw new ArgumentNullException(nameof(artworkRepository));
+
         }
 
         //-----INDEX-----

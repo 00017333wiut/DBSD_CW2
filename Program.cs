@@ -1,3 +1,4 @@
+using CW2.DAL.EF;
 using CW2.DAL.Entities;
 using CW2.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ string connStr = conf.GetConnectionString("ArtRentLocalDB");
 connStr = connStr.Replace("|DbDir|", builder.Environment.ContentRootPath);
 
 
-builder.Services.AddDbContext<DbContext>(options =>
+builder.Services.AddDbContext<ArtRentDbContext>(options =>
     options.UseSqlServer(connStr)
                .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole().AddDebug()))
 
@@ -26,13 +27,22 @@ builder.Services.AddDbContext<DbContext>(options =>
 builder.Services.AddSingleton<IArtworkRepository>(
     s => new DapperStoredProcArtworkRepository(connStr)
     );
+*/
+/*builder.Services.AddSingleton<IArtworkRepository>(
+    s => new DapperArtworkRepository(connStr)
+    );*/
 
-//builder.Services.AddSingleton<IArtworkRepository>(
-//    s => new DapperArtworkRepository(connStr)
-//    );
+builder.Services.AddDbContext<ArtRentDbContext>(options =>
+    options.UseSqlServer(connStr)
+);
 
 
-// builder.Services.AddScoped<IEmployeeRepository, EfEmployeeRepository>();
+builder.Services.AddScoped<IArtworkRepository, EfArtworkRepository>();
+
+
+builder.Services.AddScoped<ICustomerRepository, EfCustomerRepository>();
+
+//builder.Services.AddScoped<IArtworkRepository, EfArtworkRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
