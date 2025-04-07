@@ -1,106 +1,100 @@
 ﻿@model IEnumerable<CW2.Models.ArtworkViewModel>
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Artworks";
 }
+<h1>Artworks</h1>
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<p>
-    <a asp-action="Filter">Filter</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ArtworkId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ArtistId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoryId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RentalPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Availability)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsAvailable)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ArtworkImage)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArtworkId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArtistId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RentalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Availability)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAvailable)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArtworkImage)
-            </td>
-            <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ArtworkId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ArtworkId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ArtworkId }) |
-                        @Html.ActionLink("Export This to XML", "ExportXml",
-                                 new
-                                 {
-                                     title = item.Title,
-                                     year = item.Year
-                                 },
-                                 new { @class = "btn btn-sm btn-outline-secondary" })
-            </td>
-        </tr>
-}
-        <div class="export-links mt-3">
-            <h4>Export Options:</h4>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
             <div class="btn-group">
-                @Html.ActionLink("Export All to XML", "ExportXml",
-                         new { },
-                         new { @class = "btn btn-outline-primary" })
-                @Html.ActionLink("Export All to JSON", "ExportJson",
-                         new { },
-                         new { @class = "btn btn-outline-primary" })
+                <a asp-action="Create" class="btn btn-primary">Create New</a>
+                <a asp-action="Filter" class="btn btn-info">Filter</a>
+                <a href="../Customer/Index" class="btn btn-primary">Customers</a>
             </div>
         </div>
 
+        <div class="col-md-6 text-right">
+            <a asp-action="ExportXml" class="btn btn-outline-primary">Export XML</a>
+            <a asp-action="ExportJson" class="btn btn-outline-primary">Export JSON</a>
+        </div>
 
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ArtworkId)</th>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.ArtistId)</th>
+            <th>@Html.DisplayNameFor(model => model.CategoryId)</th>
+            <th>@Html.DisplayNameFor(model => model.Year)</th>
+            <th>@Html.DisplayNameFor(model => model.RentalPrice)</th>
+            <th>@Html.DisplayNameFor(model => model.Availability)</th>
+            <th>@Html.DisplayNameFor(model => model.IsAvailable)</th>
+            <th>@Html.DisplayNameFor(model => model.ArtworkImage)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ArtworkId)</td>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.ArtistId)</td>
+                <td>@Html.DisplayFor(modelItem => item.CategoryId)</td>
+                <td>@Html.DisplayFor(modelItem => item.Year)</td>
+                <td>@Html.DisplayFor(modelItem => item.RentalPrice)</td>
+                <td>@Html.DisplayFor(modelItem => item.Availability)</td>
+                <td>@Html.DisplayFor(modelItem => item.IsAvailable)</td>
+                <td>@Html.DisplayFor(modelItem => item.ArtworkImage)</td>
+                <td>
+                    <div class="btn-group">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ArtworkId }, new { @class = "btn btn-sm btn-outline-primary" })
+                        @Html.ActionLink("Details", "Details", new { id = item.ArtworkId }, new { @class = "btn btn-sm btn-outline-primary" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ArtworkId }, new { @class = "btn btn-sm btn-outline-primary" })
+                        @Html.ActionLink("Export to XML", "ExportXml", new { title = item.Title, year = item.Year }, new { @class = "btn btn-sm btn-outline-primary" })
+                    </div>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+	<!-- import -->
+    <form id="importForm" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <button type="submit" class="btn btn-success">Import JSON</button>
+    </form>
+
+    <script>
+        $('#importForm').on('submit', function (e) {
+            e.preventDefault();
+
+
+            console.log("Submitting import request...");
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: 'POST',
+                url: '/Artwork/ImportJson', // CONVENTIONAL routing
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    alert(response.message); 
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX error:", error, xhr.responseText);
+                    alert("Error importing artworks: " + xhr.responseText);
+                }
+            });
+        });
+    </script>
+
+    
+
+

@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
 using CW2.DAL.Entities;
-using CW2.DAL.Repositories;
 using CW2.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
 using System.Text;
-using System.Xml.Serialization;
 
 namespace CW2.Controllers
 {
@@ -191,20 +186,36 @@ namespace CW2.Controllers
                            $"Artworks_{DateTime.Now:yyyyMMdd}.json");
         }
 
-        public ActionResult ExportJson(
-            string? title = null,
-            int? year = null,
-            string sortColumn = "ArtworkID",
-            bool sortDesc = false)
+        //------IMPORT-----
+        [HttpPost]
+        public async Task<IActionResult> ImportJson(IFormFile file)
+
         {
-            var json = _artworkRepository.ExportToJson(title, year, sortColumn, sortDesc);
+            Console.WriteLine("🚀 ImportJson");
 
-            if (string.IsNullOrWhiteSpace(json))
-                return NotFound();
+            try
+            {
+                if (file == null || file.Length == 0)
+                {
+                    return BadRequest("File is required");
+                }
 
-            return File(Encoding.UTF8.GetBytes(json),
-                "application/json",
-                $"Artworks_{DateTime.Now:yyyyMMdd}.json");
+                // Read the file content
+                string jsonData;
+                using (var reader = new StreamReader(file.OpenReadStream()))
+                {
+                    jsonData = await reader.ReadToEndAsync();
+                }
+
+                // Call the repository method to import the JSON data
+                int importedCount = _artworkRepository.ImportFromJson(jsonData);
+
+                return Ok(new { Message = $"Successfully imported {importedCount} artwork(s)" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error importing artworks: {ex.Message}");
+            }
         }
 
         protected override void Dispose(bool disposing)

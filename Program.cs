@@ -21,37 +21,39 @@ builder.Services.AddDbContext<ArtRentDbContext>(options =>
 
     );
 
+//AdoNet
 //builder.Services.AddSingleton<IArtworkRepository>
 //    (s => new AdoNetArtworkRepository(connStr));
 
+//DapperStoredProcedures
 builder.Services.AddSingleton<IArtworkRepository>(
     s => new DapperStoredProcArtworkRepository(connStr)
     );
-*/
+
+//Dapper
 /*builder.Services.AddSingleton<IArtworkRepository>(
     s => new DapperArtworkRepository(connStr)
     );*/
 
+
+//DbContext
 builder.Services.AddDbContext<ArtRentDbContext>(options =>
     options.UseSqlServer(connStr)
 );
 
 
-builder.Services.AddScoped<IArtworkRepository, EfArtworkRepository>();
+//builder.Services.AddScoped<IArtworkRepository, EfArtworkRepository>();
 
 
 builder.Services.AddScoped<ICustomerRepository, EfCustomerRepository>();
 
 //builder.Services.AddScoped<IArtworkRepository, EfArtworkRepository>();
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 
 var app = builder.Build();
 
-
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

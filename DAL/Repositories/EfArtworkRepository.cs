@@ -163,5 +163,15 @@ namespace CW2.DAL.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public int ImportFromJson(string jsonData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int ImportFromXml(string xmlData)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

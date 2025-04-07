@@ -18,7 +18,8 @@ namespace CW2.DAL.Entities
                            int? year = null,
                            string sortColumn = "ArtworkID",
                            bool sortDesc = false);
-        
+        public int ImportFromJson(string jsonData);
+        public int ImportFromXml(string xmlData);
         IList<Artwork> Filter(string? title,
                                  DateTime? availability,
                                  int artistId,

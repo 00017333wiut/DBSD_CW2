@@ -53,13 +53,14 @@ namespace CW2.DAL.Repositories
         }
 
         public string ExportToJson(
-            string? title = null,
-            int? year = null,
-            string sortColumn = "ArtworkID",
-            bool sortDesc = false)
+    string? title = null,
+    int? year = null,
+    string sortColumn = "ArtworkID",
+    bool sortDesc = false)
         {
             using (var conn = new SqlConnection(_connStr))
             {
+                conn.Open();
                 var p = new DynamicParameters();
                 p.Add("@Title", title);
                 p.Add("@Year", year);
@@ -69,10 +70,27 @@ namespace CW2.DAL.Repositories
 
                 conn.Execute(
                     "udpArtworkExportAsJson",
-                    param: p,
+                    p,
                     commandType: CommandType.StoredProcedure);
 
                 return p.Get<string>("@JsonData");
+            }
+        }
+
+        //
+        public int ImportFromJson(string jsonData)
+        {
+            using (var conn = new SqlConnection(_connStr))
+            {
+                conn.Open();
+                var p = new DynamicParameters();
+                p.Add("@JsonData", jsonData);
+
+                
+                return conn.ExecuteScalar<int>(
+                    "udpArtworkImportFromJson",
+                    p,
+                    commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -151,6 +169,11 @@ namespace CW2.DAL.Repositories
         }
 
         public void Update(Artwork artwork)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int ImportFromXml(string xmlData)
         {
             throw new NotImplementedException();
         }

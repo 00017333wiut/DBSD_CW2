@@ -123,6 +123,16 @@ namespace CW2.DAL.Repositories
 
         }
 
+        public int ImportFromJson(string jsonData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int ImportFromXml(string xmlData)
+        {
+            throw new NotImplementedException();
+        }
+
         public Artwork Insert(Artwork artwork)
         {
             using var conn = new SqlConnection(_connStr);

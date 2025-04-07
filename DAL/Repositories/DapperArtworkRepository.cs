@@ -120,6 +120,16 @@ namespace CW2.DAL.Repositories
                                                new { ArtworkId = id });
         }
 
+        public int ImportFromJson(string jsonData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int ImportFromXml(string xmlData)
+        {
+            throw new NotImplementedException();
+        }
+
         public Artwork Insert(Artwork employee)
         {
             using var conn = new SqlConnection(_connStr);

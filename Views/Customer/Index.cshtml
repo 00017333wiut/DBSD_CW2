@@ -1,14 +1,16 @@
 ﻿@model IEnumerable<CustomerViewModel>
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/_ViewImports.cshtml";
+    ViewData["Title"] = "Customers";
 }
 
-<h1>Index</h1>
+<h1>Customers</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
+</p>
+<p>
+    <a href="../Artwork/Index">Artworks</a>
 </p>
 <table class="table">
     <thead>
